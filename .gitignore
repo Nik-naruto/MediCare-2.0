@@ -1,0 +1,62 @@
+# Root .gitignore for MediCare 2.0
+
+# Environment Files (Keep .env.example trackable)
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+*.env.local
+
+# Python Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Node Dependencies & Builds
+node_modules/
+**/node_modules/
+dist/
+build/
+dist-ssr/
+
+# Python Cache & Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local Databases
+*.db
+*.sqlite
+*.sqlite3
+medicare.db
+backend/medicare.db
+
+# Agent Logs & Temporary Scratch Directories
+artifacts/
+scratch/
+**/artifacts/
+**/scratch/
+.tempmediaStorage/
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# OS Generated Files
+.DS_Store
+Thumbs.db

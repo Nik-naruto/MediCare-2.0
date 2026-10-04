@@ -17,9 +17,13 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
+from sqlalchemy.orm import Session
+
 def upgrade() -> None:
     # Run idempotent seed script against the active database connection
-    seed_demo_dataset()
+    bind = op.get_bind()
+    session = Session(bind=bind)
+    seed_demo_dataset(db=session)
 
 
 def downgrade() -> None:

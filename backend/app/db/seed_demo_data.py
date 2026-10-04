@@ -1292,8 +1292,11 @@ PATIENTS_DATA = [
 
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
-def seed_demo_dataset():
-    db: Session = SessionLocal()
+def seed_demo_dataset(db: Session = None):
+    close_db = False
+    if db is None:
+        db = SessionLocal()
+        close_db = True
     try:
         hashed_pw = get_password_hash(COMMON_PASSWORD)
         print("=== 1. SEEDING RECEPTIONISTS (5 ACCOUNTS) ===")
@@ -1530,7 +1533,8 @@ def seed_demo_dataset():
         print(f"ERROR DURING SEEDING: {e}")
         raise e
     finally:
-        db.close()
+        if close_db:
+            db.close()
 
 if __name__ == "__main__":
     seed_demo_dataset()

@@ -1425,7 +1425,6 @@ def seed_demo_dataset(db: Session = None):
                     ).first()
                     if sched:
                         sched.is_active = False
-                        db.commit()
                     continue
 
                 sched = db.query(DoctorSchedule).filter(
@@ -1443,7 +1442,7 @@ def seed_demo_dataset(db: Session = None):
                         is_active=True,
                     )
                     db.add(sched)
-                    db.commit()
+            db.commit()
 
         print("\n=== 4. SEEDING APPOINTMENTS (FOR EXACTLY 16 PATIENTS) ===")
         # 16 patients (indices 0..15) get appointments

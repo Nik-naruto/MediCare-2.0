@@ -51,6 +51,18 @@ doctors_upload_path.mkdir(parents=True, exist_ok=True)
 # Mount static file directory for upload assets
 app.mount("/uploads", StaticFiles(directory=str(upload_path)), name="uploads")
 
+from app.db.seed_demo_data import seed_demo_dataset
+
+
+@app.on_event("startup")
+def on_startup():
+    """Ensure demo dataset is populated into database on application startup."""
+    try:
+        seed_demo_dataset()
+    except Exception as e:
+        print(f"Startup seeding notice: {e}")
+
+
 # Include API v1 Master Router
 app.include_router(api_router, prefix=settings.API_V1_STR)
 

@@ -6,6 +6,7 @@ from app.db.seed_demo_data import seed_demo_dataset
 router = APIRouter()
 
 
+@router.get("/seed-demo-data", tags=["Development & Seeding"])
 @router.post("/seed-demo-data", tags=["Development & Seeding"])
 def seed_production_demo_data():
     """Seed complete demo dataset into production database (60 Doctors, 5 Receptionists, 20 Patients, Schedules, Appointments)."""

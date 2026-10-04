@@ -82,3 +82,21 @@ def health_check():
     return {
         "status": "healthy",
     }
+
+
+@app.get("/seed-demo-data", tags=["Seeding"])
+@app.post("/seed-demo-data", tags=["Seeding"])
+def seed_endpoint():
+    """Trigger demo dataset seeding into active database."""
+    try:
+        seed_demo_dataset()
+        return {
+            "status": "success",
+            "message": "Demo dataset seeded successfully.",
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "detail": str(e),
+        }
+

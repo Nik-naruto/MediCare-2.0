@@ -6,43 +6,43 @@ import enum
 class UserRole(str, enum.Enum):
     """User account roles."""
 
-    PATIENT = "Patient"
-    DOCTOR = "Doctor"
-    RECEPTIONIST = "Receptionist"
-    ADMIN = "Admin"
+    PATIENT = "PATIENT"
+    DOCTOR = "DOCTOR"
+    RECEPTIONIST = "RECEPTIONIST"
+    ADMIN = "ADMIN"
 
 
 class AppointmentStatus(str, enum.Enum):
     """Appointment consultation lifecycle statuses."""
 
-    SCHEDULED = "Scheduled"
-    CHECKED_IN = "Checked In"
-    IN_CONSULTATION = "In Consultation"
-    COMPLETED = "Completed"
-    CANCELLED = "Cancelled"
-    NO_SHOW = "No Show"
+    SCHEDULED = "SCHEDULED"
+    CHECKED_IN = "CHECKED_IN"
+    IN_CONSULTATION = "IN_CONSULTATION"
+    COMPLETED = "COMPLETED"
+    CANCELLED = "CANCELLED"
+    NO_SHOW = "NO_SHOW"
 
 
 class PaymentStatus(str, enum.Enum):
     """Billing and invoice payment statuses."""
 
-    PAID = "Paid"
-    UNPAID = "Unpaid"
-    REFUNDED = "Refunded"
+    PAID = "PAID"
+    UNPAID = "UNPAID"
+    REFUNDED = "REFUNDED"
 
 
 class LabReportStatus(str, enum.Enum):
     """Pathology lab test diagnostic statuses."""
 
-    PENDING = "Pending"
-    IN_PROGRESS = "In Progress"
-    READY = "Ready"
-    CANCELLED = "Cancelled"
+    PENDING = "PENDING"
+    IN_PROGRESS = "IN_PROGRESS"
+    READY = "READY"
+    CANCELLED = "CANCELLED"
 
 
 class Gender(str, enum.Enum):
     """Gender classifications."""
 
-    MALE = "Male"
-    FEMALE = "Female"
-    OTHER = "Other"
+    MALE = "MALE"
+    FEMALE = "FEMALE"
+    OTHER = "OTHER"

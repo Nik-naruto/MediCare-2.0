@@ -17,6 +17,7 @@ from app.api.v1.endpoints import (
     reports,
     schedules,
     users,
+    dev,
 )
 
 api_router = APIRouter()
@@ -35,4 +36,5 @@ api_router.include_router(invoices.router, prefix="/invoices", tags=["Invoices"]
 api_router.include_router(notifications.router, prefix="/notifications", tags=["Notifications"])
 api_router.include_router(audit_logs.router, prefix="/audit-logs", tags=["Audit Logs"])
 api_router.include_router(reports.router, prefix="/reports", tags=["Reports"])
+api_router.include_router(dev.router, prefix="/dev", tags=["Development & Seeding"])
 

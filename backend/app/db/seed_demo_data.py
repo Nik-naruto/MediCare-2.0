@@ -56,6 +56,69 @@ REAL_DEPARTMENTS = [
     "Internal Medicine",
 ]
 
+DOCTOR_PHOTO_MAP = {
+    "dr.rajesh.sharma@medicare.demo": "/uploads/doctors/doc_male_1_2f16d806.jpg",
+    "dr.ananya.sen@medicare.demo": "/uploads/doctors/doc_male_2_be0df4b9.jpg",
+    "dr.vikramaditya.rao@medicare.demo": "/uploads/doctors/doc_male_3_06cbcbc7.jpg",
+    "dr.sunita.patel@medicare.demo": "/uploads/doctors/doc_female_1_33ffa569.jpg",
+    "dr.amitabha.mukherji@medicare.demo": "/uploads/doctors/doc_male_4_bb3cf51c.jpg",
+    "dr.priya.deshmukh@medicare.demo": "/uploads/doctors/doc_female_2_3f83e72e.jpg",
+    "dr.suresh.kulkarni@medicare.demo": "/uploads/doctors/doc_male_5_dc8db5df.jpg",
+    "dr.kavita.reddy@medicare.demo": "/uploads/doctors/doc_female_3_633c9dbe.jpg",
+    "dr.arvind.swaminathan@medicare.demo": "/uploads/doctors/doc_male_6_1d4e74a4.jpg",
+    "dr.meenakshi.sundaram@medicare.demo": "/uploads/doctors/doc_female_4_649ee1d9.jpg",
+    "dr.ramesh.gupta@medicare.demo": "/uploads/doctors/doc_male_7_d6ffdde8.jpg",
+    "dr.shalini.bhatnagar@medicare.demo": "/uploads/doctors/doc_female_5_cc033691.jpg",
+    "dr.alok.verma@medicare.demo": "/uploads/doctors/doc_male_8_a85c2d1a.jpg",
+    "dr.harish.prasad@medicare.demo": "/uploads/doctors/doc_male_9_eb0d7ce7.jpg",
+    "dr.nitin.joshi@medicare.demo": "/uploads/doctors/doc_male_10_ecb6c95a.jpg",
+    "dr.siddharth.malhotra@medicare.demo": "/uploads/doctors/doc_male_11_17ca5b17.jpg",
+    "dr.manoj.choudhary@medicare.demo": "/uploads/doctors/doc_male_12_8001efd4.jpg",
+    "dr.tarun.agarwal@medicare.demo": "/uploads/doctors/doc_male_13_b12129e6.jpg",
+    "dr.bhaskar.roy@medicare.demo": "/uploads/doctors/doc_male_14_dba6f279.jpg",
+    "dr.vijay.sethi@medicare.demo": "/uploads/doctors/doc_male_15_33b21793.jpg",
+    "dr.devendra.shrivastava@medicare.demo": "/uploads/doctors/doc_male_16_ffd15d4c.jpg",
+    "dr.rajiv.singh@medicare.demo": "/uploads/doctors/doc_male_17_0a78ec3e.jpg",
+    "dr.kedar.tripathy@medicare.demo": "/uploads/doctors/doc_male_18_568c2730.jpg",
+    "dr.pankaj.kulkarni@medicare.demo": "/uploads/doctors/doc_male_19_1bd33ed5.jpg",
+    "dr.girish.shetty@medicare.demo": "/uploads/doctors/doc_male_20_5e5788bc.jpg",
+    "dr.sunil.mahapatra@medicare.demo": "/uploads/doctors/doc_male_21_cb73f967.jpg",
+    "dr.nalinaksha.mitra@medicare.demo": "/uploads/doctors/doc_male_22_1fe489c3.jpg",
+    "dr.ashish.deshpande@medicare.demo": "/uploads/doctors/doc_male_23_e0f736d9.jpg",
+    "dr.mohan.jain@medicare.demo": "/uploads/doctors/doc_male_24_911da504.jpg",
+    "dr.pradeep.sharma@medicare.demo": "/uploads/doctors/doc_male_25_cc4c2900.jpg",
+    "dr.subhash.bose@medicare.demo": "/uploads/doctors/doc_male_26_451b6913.jpg",
+    "dr.anand.vardhan@medicare.demo": "/uploads/doctors/doc_male_27_63a74653.jpg",
+    "dr.hemant.chaudhari@medicare.demo": "/uploads/doctors/doc_male_28_49ba5df6.jpg",
+    "dr.utpal.bhuyan@medicare.demo": "/uploads/doctors/doc_male_29_19b3cb26.jpg",
+    "dr.biren.das@medicare.demo": "/uploads/doctors/doc_male_30_b77f5cd5.jpg",
+    "dr.deepa.nambiar@medicare.demo": "/uploads/doctors/doc_female_6_0091160a.jpg",
+    "dr.radhika.iyer@medicare.demo": "/uploads/doctors/doc_female_7_a67ab09b.jpg",
+    "dr.pooja.saxena@medicare.demo": "/uploads/doctors/doc_female_8_98611765.jpg",
+    "dr.divya.menon@medicare.demo": "/uploads/doctors/doc_female_9_ddeb5734.jpg",
+    "dr.archana.hegde@medicare.demo": "/uploads/doctors/doc_female_10_1cb44b4b.jpg",
+    "dr.neha.kapoor@medicare.demo": "/uploads/doctors/doc_female_11_a7720172.jpg",
+    "dr.ritu.pillai@medicare.demo": "/uploads/doctors/doc_female_12_8ff6b781.jpg",
+    "dr.smita.bannerjee@medicare.demo": "/uploads/doctors/doc_female_13_f9604645.jpg",
+    "dr.vandana.mohan@medicare.demo": "/uploads/doctors/doc_female_14_436f62dd.jpg",
+    "dr.swati.nair@medicare.demo": "/uploads/doctors/doc_female_15_d79606ca.jpg",
+    "dr.anupama.bhattacharya@medicare.demo": "/uploads/doctors/doc_female_16_fe3b8961.jpg",
+    "dr.shilpa.rao@medicare.demo": "/uploads/doctors/doc_female_17_976f02b2.jpg",
+    "dr.sunayana.das@medicare.demo": "/uploads/doctors/doc_female_18_5375e764.jpg",
+    "dr.tanvi.chawla@medicare.demo": "/uploads/doctors/doc_female_19_2511866e.jpg",
+    "dr.leena.thomas@medicare.demo": "/uploads/doctors/doc_female_20_74d8f375.jpg",
+    "dr.pallavi.kulkarni@medicare.demo": "/uploads/doctors/doc_female_21_60ce0ab1.jpg",
+    "dr.gayatri.saxena@medicare.demo": "/uploads/doctors/doc_female_22_4854ba14.jpg",
+    "dr.sarika.pandey@medicare.demo": "/uploads/doctors/doc_female_23_dbd48cb5.jpg",
+    "dr.jyoti.malhotra@medicare.demo": "/uploads/doctors/doc_female_24_ad6a3b5d.jpg",
+    "dr.reena.dsouza@medicare.demo": "/uploads/doctors/doc_female_25_71e8c3e4.jpg",
+    "dr.madhuri.shastri@medicare.demo": "/uploads/doctors/doc_female_26_026475e0.jpg",
+    "dr.nishi.gupta@medicare.demo": "/uploads/doctors/doc_female_27_aa5ae337.jpg",
+    "dr.sangeeta.rao@medicare.demo": "/uploads/doctors/doc_female_28_4b680f51.jpg",
+    "dr.archana.kulkarni@medicare.demo": "/uploads/doctors/doc_female_29_87c19fec.jpg",
+    "dr.sonali.sengupta@medicare.demo": "/uploads/doctors/doc_female_30_6f2bb7e5.jpg",
+}
+
 DOCTORS_DATA = [
     # Department 1: Cardiology
     {
@@ -1325,6 +1388,7 @@ def seed_demo_dataset():
                     consultation_fee=d_data["fee"],
                     room_no=d_data["room_no"],
                     bio=d_data["bio"],
+                    profile_photo_url=DOCTOR_PHOTO_MAP.get(d_data["email"]),
                     is_available=True,
                 )
                 db.add(doctor)
@@ -1340,6 +1404,8 @@ def seed_demo_dataset():
                 doctor.consultation_fee = d_data["fee"]
                 doctor.room_no = d_data["room_no"]
                 doctor.bio = d_data["bio"]
+                if d_data["email"] in DOCTOR_PHOTO_MAP:
+                    doctor.profile_photo_url = DOCTOR_PHOTO_MAP[d_data["email"]]
                 db.commit()
                 print(f"Updated Doctor profile: {user.full_name} -> {d_data['dept']}")
 

@@ -1299,10 +1299,19 @@ def seed_demo_dataset(db: Session = None):
         close_db = True
     try:
         hashed_pw = get_password_hash(COMMON_PASSWORD)
+        
+        # -------------------------------------------------------------
+        # 1. SEEDING RECEPTIONISTS (5 ACCOUNTS)
+        # -------------------------------------------------------------
         print("=== 1. SEEDING RECEPTIONISTS (5 ACCOUNTS) ===")
+        receptionist_emails = [r["email"] for r in RECEPTIONISTS_DATA]
+        existing_users = {
+            u.email: u for u in db.query(User).filter(User.email.in_(receptionist_emails)).all()
+        }
+        
         receptionist_users = []
         for r_data in RECEPTIONISTS_DATA:
-            user = db.query(User).filter(User.email == r_data["email"]).first()
+            user = existing_users.get(r_data["email"])
             if not user:
                 user = User(
                     email=r_data["email"],
@@ -1313,17 +1322,26 @@ def seed_demo_dataset(db: Session = None):
                     is_active=True,
                 )
                 db.add(user)
-                db.commit()
-                db.refresh(user)
-                print(f"Created Receptionist: {user.full_name} ({user.email})")
+                existing_users[r_data["email"]] = user
+                print(f"Created Receptionist user: {r_data['full_name']} ({r_data['email']})")
             else:
-                print(f"Receptionist exists: {user.full_name} ({user.email})")
+                print(f"Receptionist user exists: {user.full_name} ({user.email})")
             receptionist_users.append(user)
 
+        # Flush to populate user IDs in batch
+        db.flush()
+
+        # -------------------------------------------------------------
+        # 2. SEEDING PATIENTS (20 ACCOUNTS)
+        # -------------------------------------------------------------
         print("\n=== 2. SEEDING PATIENTS (20 ACCOUNTS) ===")
-        patients_list = []
+        patient_emails = [p["email"] for p in PATIENTS_DATA]
+        existing_patient_users = {
+            u.email: u for u in db.query(User).filter(User.email.in_(patient_emails)).all()
+        }
+
         for p_data in PATIENTS_DATA:
-            user = db.query(User).filter(User.email == p_data["email"]).first()
+            user = existing_patient_users.get(p_data["email"])
             if not user:
                 user = User(
                     email=p_data["email"],
@@ -1334,10 +1352,21 @@ def seed_demo_dataset(db: Session = None):
                     is_active=True,
                 )
                 db.add(user)
-                db.commit()
-                db.refresh(user)
+                existing_patient_users[p_data["email"]] = user
 
-            patient = db.query(Patient).filter(Patient.user_id == user.id).first()
+        # Flush to populate patient user IDs
+        db.flush()
+
+        # Query existing Patient records mapped by user_id
+        patient_user_ids = [u.id for u in existing_patient_users.values()]
+        existing_patients = {
+            p.user_id: p for p in db.query(Patient).filter(Patient.user_id.in_(patient_user_ids)).all()
+        } if patient_user_ids else {}
+
+        patients_list = []
+        for p_data in PATIENTS_DATA:
+            user = existing_patient_users[p_data["email"]]
+            patient = existing_patients.get(user.id)
             if not patient:
                 patient = Patient(
                     user_id=user.id,
@@ -1349,23 +1378,29 @@ def seed_demo_dataset(db: Session = None):
                     allergies=p_data["allergies"],
                 )
                 db.add(patient)
-                db.commit()
-                db.refresh(patient)
+                existing_patients[user.id] = patient
                 print(f"Created Patient profile: {user.full_name} ({user.email})")
             else:
                 print(f"Patient profile exists: {user.full_name} ({user.email})")
             patients_list.append(patient)
 
+        # Flush to populate patient IDs
+        db.flush()
+
+        # -------------------------------------------------------------
+        # 3. SEEDING DOCTORS & SCHEDULES (60 DOCTORS across 30 DEPARTMENTS)
+        # -------------------------------------------------------------
         print("\n=== 3. SEEDING DOCTORS & SCHEDULES (60 DOCTORS across 30 DEPARTMENTS) ===")
         depts_db = db.query(Department).all()
         dept_name_map = {d.name: d for d in depts_db}
 
-        doctors_list = []
-        for d_data in DOCTORS_DATA:
-            dept_obj = dept_name_map.get(d_data["dept"])
-            assert dept_obj is not None, f"Department '{d_data['dept']}' not found in DB!"
+        doctor_emails = [d["email"] for d in DOCTORS_DATA]
+        existing_doc_users = {
+            u.email: u for u in db.query(User).filter(User.email.in_(doctor_emails)).all()
+        }
 
-            user = db.query(User).filter(User.email == d_data["email"]).first()
+        for d_data in DOCTORS_DATA:
+            user = existing_doc_users.get(d_data["email"])
             if not user:
                 user = User(
                     email=d_data["email"],
@@ -1376,10 +1411,23 @@ def seed_demo_dataset(db: Session = None):
                     is_active=True,
                 )
                 db.add(user)
-                db.commit()
-                db.refresh(user)
+                existing_doc_users[d_data["email"]] = user
 
-            doctor = db.query(Doctor).filter(Doctor.user_id == user.id).first()
+        # Flush to populate doctor user IDs
+        db.flush()
+
+        doc_user_ids = [u.id for u in existing_doc_users.values()]
+        existing_doctors = {
+            doc.user_id: doc for doc in db.query(Doctor).filter(Doctor.user_id.in_(doc_user_ids)).all()
+        } if doc_user_ids else {}
+
+        doctors_list = []
+        for d_data in DOCTORS_DATA:
+            dept_obj = dept_name_map.get(d_data["dept"])
+            assert dept_obj is not None, f"Department '{d_data['dept']}' not found in DB!"
+            user = existing_doc_users[d_data["email"]]
+
+            doctor = existing_doctors.get(user.id)
             if not doctor:
                 doctor = Doctor(
                     user_id=user.id,
@@ -1395,11 +1443,9 @@ def seed_demo_dataset(db: Session = None):
                     is_available=True,
                 )
                 db.add(doctor)
-                db.commit()
-                db.refresh(doctor)
+                existing_doctors[user.id] = doctor
                 print(f"Created Doctor profile: {user.full_name} -> {d_data['dept']} (Room {d_data['room_no']})")
             else:
-                # Ensure fields match
                 doctor.department_id = dept_obj.id
                 doctor.specialty = d_data["specialty"]
                 doctor.qualification = d_data["qualification"]
@@ -1409,28 +1455,30 @@ def seed_demo_dataset(db: Session = None):
                 doctor.bio = d_data["bio"]
                 if d_data["email"] in DOCTOR_PHOTO_MAP:
                     doctor.profile_photo_url = DOCTOR_PHOTO_MAP[d_data["email"]]
-                db.commit()
                 print(f"Updated Doctor profile: {user.full_name} -> {d_data['dept']}")
 
             doctors_list.append(doctor)
 
-            # Doctor Schedule creation (Mon-Sat, excluding doctor's leave days)
+        # Flush to populate doctor IDs
+        db.flush()
+
+        # Pre-fetch existing doctor schedules
+        doc_ids = [doc.id for doc in doctors_list]
+        existing_schedules = {}
+        if doc_ids:
+            scheds = db.query(DoctorSchedule).filter(DoctorSchedule.doctor_id.in_(doc_ids)).all()
+            for s in scheds:
+                existing_schedules[(s.doctor_id, s.day_of_week)] = s
+
+        for d_data, doctor in zip(DOCTORS_DATA, doctors_list):
             leave_days = d_data["leave_days"]
             for day_name in WEEKDAYS:
+                sched_key = (doctor.id, day_name)
+                sched = existing_schedules.get(sched_key)
                 if day_name in leave_days:
-                    # Off day - ensure inactive or no schedule
-                    sched = db.query(DoctorSchedule).filter(
-                        DoctorSchedule.doctor_id == doctor.id,
-                        DoctorSchedule.day_of_week == day_name
-                    ).first()
                     if sched:
                         sched.is_active = False
                     continue
-
-                sched = db.query(DoctorSchedule).filter(
-                    DoctorSchedule.doctor_id == doctor.id,
-                    DoctorSchedule.day_of_week == day_name
-                ).first()
 
                 if not sched:
                     sched = DoctorSchedule(
@@ -1442,68 +1490,72 @@ def seed_demo_dataset(db: Session = None):
                         is_active=True,
                     )
                     db.add(sched)
-            db.commit()
+                    existing_schedules[sched_key] = sched
 
+        # -------------------------------------------------------------
+        # 4. SEEDING APPOINTMENTS (FOR EXACTLY 16 PATIENTS)
+        # -------------------------------------------------------------
         print("\n=== 4. SEEDING APPOINTMENTS (FOR EXACTLY 16 PATIENTS) ===")
-        # 16 patients (indices 0..15) get appointments
-        # 4 patients (indices 16..19) get NO appointments
+        # Flush schedules before querying active schedules
+        db.flush()
+
+        # Build in-memory map of active doctor schedules: (doctor_id, day_of_week) -> True
+        active_sched_set = {
+            (s.doctor_id, s.day_of_week) for s in existing_schedules.values() if s.is_active
+        }
+
+        # Pre-fetch existing appointments for these patients
+        patient_ids = [p.id for p in patients_list[:16]]
+        existing_appts = {}
+        if patient_ids:
+            appts = db.query(Appointment).filter(Appointment.patient_id.in_(patient_ids)).all()
+            for a in appts:
+                existing_appts[(a.patient_id, a.doctor_id, a.appointment_date)] = a
+
         appts_created_count = 0
         base_date = date.today() + timedelta(days=1)
 
-        # Distribute appointments across doctors and future dates
         for idx in range(16):
             patient = patients_list[idx]
             p_info = PATIENTS_DATA[idx]
             target_dept_name = p_info["dept_target"]
 
-            # Find a doctor in that target department
             target_doc = None
             for doc in doctors_list:
                 if doc.department and doc.department.name == target_dept_name:
                     target_doc = doc
                     break
-
             if not target_doc:
                 target_doc = doctors_list[idx % len(doctors_list)]
 
-            # Calculate future date that falls on doctor's working day
             appt_date = base_date + timedelta(days=(idx % 10))
-            # Adjust if Sunday or doctor leave day
             while True:
                 day_name = appt_date.strftime("%A")
                 if day_name == "Sunday":
                     appt_date += timedelta(days=1)
                     continue
 
-                # Check if doctor has active schedule on day_name
-                active_sched = db.query(DoctorSchedule).filter(
-                    DoctorSchedule.doctor_id == target_doc.id,
-                    DoctorSchedule.day_of_week == day_name,
-                    DoctorSchedule.is_active == True
-                ).first()
-
-                if not active_sched:
+                if (target_doc.id, day_name) not in active_sched_set:
                     appt_date += timedelta(days=1)
                     continue
                 break
 
-            # Slot time: staggered e.g. 09:30, 10:00, 10:30, etc.
             start_hour = 9 + ((idx * 30) // 60)
             start_min = (idx * 30) % 60
             slot_start = time(start_hour, start_min)
             dt_end = datetime.combine(appt_date, slot_start) + timedelta(minutes=15)
             slot_end = dt_end.time()
 
-            # Check if appointment exists
-            existing_appt = db.query(Appointment).filter(
-                Appointment.patient_id == patient.id,
-                Appointment.doctor_id == target_doc.id,
-                Appointment.appointment_date == appt_date
-            ).first()
+            appt_key = (patient.id, target_doc.id, appt_date)
+            existing_appt = existing_appts.get(appt_key)
 
             if not existing_appt:
                 token = f"TOKEN-{100 + idx}"
-                status = AppointmentStatus.SCHEDULED if idx < 12 else (AppointmentStatus.CHECKED_IN if idx < 14 else AppointmentStatus.COMPLETED)
+                status = (
+                    AppointmentStatus.SCHEDULED
+                    if idx < 12
+                    else (AppointmentStatus.CHECKED_IN if idx < 14 else AppointmentStatus.COMPLETED)
+                )
                 payment_status = PaymentStatus.UNPAID if status == AppointmentStatus.SCHEDULED else PaymentStatus.PAID
                 new_appt = Appointment(
                     patient_id=patient.id,
@@ -1518,13 +1570,14 @@ def seed_demo_dataset(db: Session = None):
                     token_no=token,
                 )
                 db.add(new_appt)
-                db.commit()
-                db.refresh(new_appt)
+                existing_appts[appt_key] = new_appt
                 appts_created_count += 1
-                print(f"Created Appointment #{new_appt.id}: Patient '{patient.user.full_name}' -> Doctor '{target_doc.user.full_name}' on {appt_date} ({slot_start}) [{status.value}]")
+                print(f"Staged Appointment: Patient '{patient.user.full_name}' -> Doctor '{target_doc.user.full_name}' on {appt_date} ({slot_start}) [{status.value}]")
             else:
                 print(f"Appointment exists for Patient '{patient.user.full_name}'")
 
+        # Single final commit for the complete demo dataset transaction
+        db.commit()
         print("\nDEMO DATA SEEDING COMPLETE SUCCESSFULLY!")
 
     except Exception as e:

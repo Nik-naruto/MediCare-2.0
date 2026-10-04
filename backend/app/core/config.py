@@ -1,7 +1,7 @@
 """Application Configuration using Pydantic Settings (v2)."""
 
 from typing import List, Optional
-from pydantic import model_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -21,6 +21,23 @@ class Settings(BaseSettings):
 
     # Database Configuration
     DATABASE_URL: str
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def assemble_db_connection(cls, v: str) -> str:
+        """Ensure PostgreSQL connection URLs explicitly use the psycopg2 driver."""
+        if isinstance(v, str):
+            if v.startswith("postgresql+psycopg://"):
+                return v.replace("postgresql+psycopg://", "postgresql+psycopg2://", 1)
+            if v.startswith("postgres://"):
+                return v.replace("postgres://", "postgresql+psycopg2://", 1)
+            if (
+                v.startswith("postgresql://")
+                and not v.startswith("postgresql+psycopg2://")
+                and not v.startswith("postgresql+psycopg://")
+            ):
+                return v.replace("postgresql://", "postgresql+psycopg2://", 1)
+        return v
 
     # JWT & Security Configuration
     SECRET_KEY: Optional[str] = None

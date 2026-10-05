@@ -174,11 +174,11 @@ export const Register = () => {
         full_name: formData.fullName.trim(),
         phone: formData.phone.trim() || undefined,
         role: roleEnumMap[selectedRole] || 'PATIENT',
-        gender: formData.gender,
-        date_of_birth: formData.dob || undefined,
       };
 
       if (selectedRole === 'Patient') {
+        payload.gender = formData.gender ? formData.gender.toUpperCase() : undefined;
+        payload.date_of_birth = formData.dob || undefined;
         payload.blood_group = formData.bloodGroup || undefined;
         payload.emergency_contact = formData.emergencyContact.trim() || undefined;
         payload.address = formData.address.trim() || undefined;

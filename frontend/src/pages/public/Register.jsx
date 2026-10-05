@@ -162,10 +162,10 @@ export const Register = () => {
     try {
       // Map role to backend enum string
       const roleEnumMap = {
-        Patient: 'Patient',
-        Doctor: 'Doctor',
-        Reception: 'Receptionist',
-        Admin: 'Admin',
+        Patient: 'PATIENT',
+        Doctor: 'DOCTOR',
+        Reception: 'RECEPTIONIST',
+        Admin: 'ADMIN',
       };
 
       const payload = {
@@ -173,7 +173,7 @@ export const Register = () => {
         password: formData.password,
         full_name: formData.fullName.trim(),
         phone: formData.phone.trim() || undefined,
-        role: roleEnumMap[selectedRole] || 'Patient',
+        role: roleEnumMap[selectedRole] || 'PATIENT',
         gender: formData.gender,
         date_of_birth: formData.dob || undefined,
       };

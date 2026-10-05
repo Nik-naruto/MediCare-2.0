@@ -84,7 +84,8 @@ export const DoctorProfile = () => {
           matched = response.data;
         }
       } catch (meErr) {
-        if (meErr.status === 404 || meErr.response?.status === 404) {
+        const isFallbackStatus = [404, 405, 422].includes(meErr.status) || [404, 405, 422].includes(meErr.response?.status);
+        if (isFallbackStatus) {
           const response = await apiClient.get('/doctors/?limit=100');
           const doctorsList = Array.isArray(response.data) ? response.data : [];
           matched = doctorsList.find(

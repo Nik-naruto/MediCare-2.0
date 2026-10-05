@@ -18,7 +18,8 @@ app = FastAPI(
 
 
 # CORS Middleware (Environment-driven configuration)
-cors_origins = [str(origin).strip() for origin in settings.BACKEND_CORS_ORIGINS if origin and str(origin).strip()]
+raw_origins = settings.BACKEND_CORS_ORIGINS if isinstance(settings.BACKEND_CORS_ORIGINS, list) else [settings.BACKEND_CORS_ORIGINS]
+cors_origins = [str(origin).strip().rstrip("/") for origin in raw_origins if origin and str(origin).strip()]
 if "*" in cors_origins:
     cors_origins = [
         "http://localhost:5173",

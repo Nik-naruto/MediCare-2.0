@@ -4,7 +4,21 @@
  * into fully qualified backend URLs for display in frontend img tags.
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api/v1';
+const getBackendOrigin = () => {
+  const rawUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
+  if (rawUrl) {
+    try {
+      return new URL(rawUrl).origin;
+    } catch (e) {
+      // Ignore URL parsing errors
+    }
+  }
+  // If running in browser and no VITE_API_BASE_URL is set, use window.location.origin for proxies
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return window.location.origin;
+  }
+  return 'http://127.0.0.1:8000';
+};
 
 export const getMediaUrl = (path) => {
   if (!path || typeof path !== 'string') return null;
@@ -19,15 +33,7 @@ export const getMediaUrl = (path) => {
     return path;
   }
 
-  // Extract backend origin (e.g. "http://127.0.0.1:8000") from API base URL
-  try {
-    const urlObj = new URL(API_BASE_URL);
-    const backendOrigin = urlObj.origin;
-    const cleanPath = path.startsWith('/') ? path : `/${path}`;
-    return `${backendOrigin}${cleanPath}`;
-  } catch (e) {
-    // Fallback if URL parsing fails
-    const cleanPath = path.startsWith('/') ? path : `/${path}`;
-    return `http://127.0.0.1:8000${cleanPath}`;
-  }
+  const backendOrigin = getBackendOrigin();
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${backendOrigin}${cleanPath}`;
 };

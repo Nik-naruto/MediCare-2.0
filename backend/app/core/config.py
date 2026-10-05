@@ -1,6 +1,6 @@
 """Application Configuration using Pydantic Settings (v2)."""
 
-from typing import List, Optional
+from typing import Any, List, Optional, Union
 from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -14,7 +14,26 @@ class Settings(BaseSettings):
     # Environment & Safety Configuration
     ENVIRONMENT: str = "development"
     ENABLE_DEV_ENDPOINTS: bool = True
-    BACKEND_CORS_ORIGINS: List[str] = ["*"]
+    BACKEND_CORS_ORIGINS: Union[str, List[str]] = ["*"]
+
+    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v: Any) -> List[str]:
+        """Support comma-separated strings, JSON arrays, or lists for CORS origins."""
+        import json
+        if isinstance(v, str):
+            v_trimmed = v.strip()
+            if v_trimmed.startswith("[") and v_trimmed.endswith("]"):
+                try:
+                    parsed = json.loads(v_trimmed)
+                    if isinstance(parsed, list):
+                        return [str(item).strip() for item in parsed if str(item).strip()]
+                except Exception:
+                    pass
+            return [item.strip() for item in v_trimmed.split(",") if item.strip()]
+        elif isinstance(v, list):
+            return [str(item).strip() for item in v if str(item).strip()]
+        return ["*"]
 
     # Storage Configuration
     UPLOAD_DIR: str = "uploads"

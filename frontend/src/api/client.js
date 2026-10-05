@@ -3,15 +3,33 @@ import axios from 'axios';
 /**
  * Base URL for MediCare 2.0 FastAPI backend API v1.
  * Loaded dynamically from Vite environment variable.
+ * Normalizes input so whether the user provides:
+ *   "https://medicare-2-0-rte1.onrender.com"
+ *   "https://medicare-2-0-rte1.onrender.com/"
+ *   "https://medicare-2-0-rte1.onrender.com/api/v1"
+ *   or undefined (falls back to local /api/v1)
+ * it always reliably resolves to the /api/v1 root.
  */
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
+const getNormalizedApiBaseUrl = () => {
+  const rawUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
+  if (!rawUrl) {
+    return '/api/v1';
+  }
+  const cleanUrl = rawUrl.replace(/\/+$/, '');
+  if (cleanUrl.endsWith('/api/v1')) {
+    return cleanUrl;
+  }
+  return `${cleanUrl}/api/v1`;
+};
+
+const API_BASE_URL = getNormalizedApiBaseUrl();
 
 /**
  * Centralized Axios HTTP Client instance.
  */
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',

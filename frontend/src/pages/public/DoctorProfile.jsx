@@ -148,7 +148,7 @@ export const DoctorProfile = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6 sm:space-y-8 text-left">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 text-left">
       {/* Back Link */}
       <div>
         <Link
@@ -160,7 +160,7 @@ export const DoctorProfile = () => {
       </div>
 
       {/* Header Card */}
-      <Card className="p-4 sm:p-6 md:p-8 bg-white dark:bg-slate-900/90 border border-slate-200/70 dark:border-slate-800/80 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.03)] rounded-2xl sm:rounded-3xl overflow-hidden">
+      <Card className="p-6 md:p-8 bg-white dark:bg-slate-900/90 border border-slate-200/70 dark:border-slate-800/80 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.03)] rounded-3xl overflow-hidden">
         <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
           {/* Avatar / Photo */}
           <div className="relative shrink-0">

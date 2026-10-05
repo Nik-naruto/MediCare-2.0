@@ -36,17 +36,17 @@ export const StatCard = ({
   return (
     <Card
       onClick={onClick}
-      className={`p-3.5 sm:p-5 flex items-center gap-3 sm:gap-4 transition-all ${
+      className={`p-5 flex items-center gap-4 transition-all ${
         onClick ? 'cursor-pointer hover:shadow-md' : ''
       } ${className}`}
     >
       {Icon && (
-        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl ${style.bg} ${style.text} flex items-center justify-center font-bold shrink-0`}>
-          <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+        <div className={`w-12 h-12 rounded-2xl ${style.bg} ${style.text} flex items-center justify-center font-bold shrink-0`}>
+          <Icon className="w-6 h-6" />
         </div>
       )}
       <div className="flex-1 min-w-0 text-left">
-        <span className="block text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{value}</span>
+        <span className="block text-2xl font-black text-slate-900 tracking-tight">{value}</span>
         <span className="text-xs text-slate-500 font-medium truncate block">{title}</span>
         {subtitle && <span className="text-[11px] text-slate-400 font-medium mt-0.5 block">{subtitle}</span>}
       </div>

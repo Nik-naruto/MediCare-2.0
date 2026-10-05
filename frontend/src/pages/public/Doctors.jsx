@@ -166,12 +166,12 @@ export const Doctors = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6 sm:space-y-8 text-left">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 text-left">
       <div>
         <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500 font-medium block mb-1">
           MEDICAL STAFF DIRECTORY
         </span>
-        <h1 className="text-2xl sm:text-3xl font-light text-slate-900 dark:text-slate-100 tracking-tight">Doctors Directory</h1>
+        <h1 className="text-3xl font-light text-slate-900 dark:text-slate-100 tracking-tight">Doctors Directory</h1>
         <p className="text-slate-500 dark:text-slate-400 text-xs mt-1 font-sans">
           Browse qualifications, consultation fees, and real-time availability of our medical staff.
         </p>
@@ -274,7 +274,7 @@ export const Doctors = () => {
                 <DoctorAvatar
                   src={doc.profilePhotoUrl}
                   name={doc.name}
-                  size="w-full h-48 sm:h-56 rounded-none text-4xl"
+                  size="w-full h-56 rounded-none text-4xl"
                   fallbackVariant="teal"
                   className="group-hover:scale-105 transition-transform duration-500"
                 />

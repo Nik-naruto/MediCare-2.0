@@ -77,12 +77,23 @@ export const DoctorProfile = () => {
     setErrorMsg('');
 
     try {
-      const response = await apiClient.get('/doctors/');
-      const doctorsList = Array.isArray(response.data) ? response.data : [];
-
-      const matched = doctorsList.find(
-        (d) => d.user_id === currentUser?.id || d.user?.id === currentUser?.id
-      );
+      let matched = null;
+      try {
+        const response = await apiClient.get('/doctors/me');
+        if (response?.data) {
+          matched = response.data;
+        }
+      } catch (meErr) {
+        if (meErr.status === 404 || meErr.response?.status === 404) {
+          const response = await apiClient.get('/doctors/?limit=100');
+          const doctorsList = Array.isArray(response.data) ? response.data : [];
+          matched = doctorsList.find(
+            (d) => d.user_id === currentUser?.id || d.user?.id === currentUser?.id
+          );
+        } else {
+          throw meErr;
+        }
+      }
 
       if (!matched) {
         setErrorMsg('Doctor profile record not found for authenticated account.');
@@ -285,7 +296,15 @@ export const DoctorProfile = () => {
         medical_registration_number: formData.medicalRegNo ? formData.medicalRegNo.trim() : null,
       };
 
-      await apiClient.put(`/doctors/${doctorProfile.id}`, doctorPayload);
+      try {
+        await apiClient.put('/doctors/me', doctorPayload);
+      } catch (putMeErr) {
+        if (doctorProfile?.id) {
+          await apiClient.put(`/doctors/${doctorProfile.id}`, doctorPayload);
+        } else {
+          throw putMeErr;
+        }
+      }
 
       // 2. Update User record (full_name, phone)
       if (currentUser?.id && (formData.name !== currentUser.name || formData.phone !== (currentUser.phone || ''))) {

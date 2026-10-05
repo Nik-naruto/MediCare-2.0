@@ -64,11 +64,19 @@ export const DoctorSchedule = () => {
     setErrorMsg('');
 
     try {
-      const docsRes = await apiClient.get('/doctors/');
-      const docsList = Array.isArray(docsRes.data) ? docsRes.data : [];
-      const matchedProfile = docsList.find(
-        (d) => d.user_id === currentUser?.id || d.user?.id === currentUser?.id
-      );
+      let matchedProfile = null;
+      try {
+        const meRes = await apiClient.get('/doctors/me');
+        if (meRes?.data) {
+          matchedProfile = meRes.data;
+        }
+      } catch (meErr) {
+        const docsRes = await apiClient.get('/doctors/?limit=100');
+        const docsList = Array.isArray(docsRes.data) ? docsRes.data : [];
+        matchedProfile = docsList.find(
+          (d) => d.user_id === currentUser?.id || d.user?.id === currentUser?.id
+        );
+      }
 
       if (!matchedProfile) {
         setErrorMsg('Doctor profile not found.');

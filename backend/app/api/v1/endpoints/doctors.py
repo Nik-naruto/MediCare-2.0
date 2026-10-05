@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from app.core.pagination import PaginationParams, add_pagination_headers
 
 from app.db.session import get_db
-from app.core.security import get_current_user, get_optional_current_user
+from app.core.security import get_current_user, get_optional_current_user, require_doctor
 from app.models.enums import UserRole
 from app.models.user import User
 from app.schemas.doctor import (
@@ -83,6 +83,58 @@ def read_doctors(
     )
     add_pagination_headers(response, total, params.skip, params.limit)
     return doctors
+
+
+@router.get("/me", response_model=DoctorResponse)
+def read_current_doctor(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_doctor),
+):
+    """Retrieve profile of currently authenticated doctor."""
+    doctor_service = DoctorService(db)
+    doctor = doctor_service.get_by_user_id(current_user.id)
+    if not doctor:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Doctor profile not found for authenticated account.",
+        )
+    return doctor
+
+
+@router.put("/me", response_model=DoctorResponse)
+def update_current_doctor(
+    doctor_in: DoctorUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_doctor),
+):
+    """Update profile details of currently authenticated doctor."""
+    doctor_service = DoctorService(db)
+    doctor = doctor_service.get_by_user_id(current_user.id)
+    if not doctor:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Doctor profile not found for authenticated account.",
+        )
+    try:
+        updated_doctor = doctor_service.update_doctor(doctor.id, doctor_in)
+        AuditLogService(db).log_action(
+            action="DOCTOR_UPDATE",
+            user=current_user,
+            resource=f"Doctor #{doctor.id}",
+            details=f"Doctor updated own profile details (Doctor #{doctor.id})",
+        )
+        return updated_doctor
+    except ValueError as e:
+        error_msg = str(e)
+        if "not found" in error_msg.lower():
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=error_msg,
+            )
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=error_msg,
+        )
 
 
 @router.get("/{doctor_id}/availability", response_model=DoctorAvailabilityResponse)

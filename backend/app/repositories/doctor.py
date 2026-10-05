@@ -2,7 +2,7 @@
 
 from typing import List, Optional
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.models.doctor import Doctor
 from app.repositories.base import BaseRepository
@@ -14,19 +14,24 @@ class DoctorRepository(BaseRepository[Doctor]):
     def __init__(self, db: Session):
         super().__init__(Doctor, db)
 
+    def get_by_id(self, doctor_id: int) -> Optional[Doctor]:
+        """Fetch doctor profile by ID with eagerly loaded user relation."""
+        stmt = select(Doctor).options(joinedload(Doctor.user)).where(Doctor.id == doctor_id)
+        return self.db.scalars(stmt).first()
+
     def get_by_user_id(self, user_id: int) -> Optional[Doctor]:
-        """Fetch doctor profile by associated user account ID."""
-        stmt = select(Doctor).where(Doctor.user_id == user_id)
+        """Fetch doctor profile by associated user account ID with eagerly loaded user relation."""
+        stmt = select(Doctor).options(joinedload(Doctor.user)).where(Doctor.user_id == user_id)
         return self.db.scalars(stmt).first()
 
     def get_by_department(self, department_id: int) -> List[Doctor]:
         """Fetch all doctors assigned to a specific department."""
-        stmt = select(Doctor).where(Doctor.department_id == department_id)
+        stmt = select(Doctor).options(joinedload(Doctor.user)).where(Doctor.department_id == department_id)
         return list(self.db.scalars(stmt).all())
 
     def get_available_doctors(self) -> List[Doctor]:
         """Fetch all currently available doctors."""
-        stmt = select(Doctor).where(Doctor.is_available.is_(True))
+        stmt = select(Doctor).options(joinedload(Doctor.user)).where(Doctor.is_available.is_(True))
         return list(self.db.scalars(stmt).all())
 
     def get_all_filtered(
@@ -45,7 +50,7 @@ class DoctorRepository(BaseRepository[Doctor]):
         from app.models.user import User
         from app.core.pagination import apply_safe_sorting
 
-        stmt = select(Doctor)
+        stmt = select(Doctor).options(joinedload(Doctor.user))
 
         # Join User for name search
         if search:

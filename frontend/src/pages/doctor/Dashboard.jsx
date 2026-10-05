@@ -93,15 +93,27 @@ export const DoctorDashboard = () => {
     setErrorMsg('');
 
     try {
+      let doctorData = null;
+      try {
+        const meRes = await apiClient.get('/doctors/me');
+        if (meRes?.data) {
+          doctorData = meRes.data;
+        }
+      } catch (meErr) {
+        // Fallback
+      }
+
       const [docsResult, aptsResult, patientsResult, notifsResult] = await Promise.allSettled([
-        apiClient.get('/doctors/'),
+        doctorData ? Promise.resolve({ data: [doctorData] }) : apiClient.get('/doctors/?limit=100'),
         apiClient.get('/appointments/'),
         apiClient.get('/patients/'),
         apiClient.get('/notifications/'),
       ]);
 
       // 1. Doctor Profile
-      if (docsResult.status === 'fulfilled') {
+      if (doctorData) {
+        setDoctorProfile(doctorData);
+      } else if (docsResult.status === 'fulfilled') {
         const docsList = Array.isArray(docsResult.value.data) ? docsResult.value.data : [];
         const matchedProfile = docsList.find(
           (d) => d.user_id === currentUser?.id || d.user?.id === currentUser?.id

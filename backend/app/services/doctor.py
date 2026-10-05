@@ -87,6 +87,10 @@ class DoctorService:
         """Fetch doctor by ID."""
         return self.doctor_repo.get_by_id(doctor_id)
 
+    def get_by_user_id(self, user_id: int) -> Optional[Doctor]:
+        """Fetch doctor profile by associated user account ID."""
+        return self.doctor_repo.get_by_user_id(user_id)
+
     def update_doctor(self, doctor_id: int, schema: DoctorUpdate) -> Doctor:
         """Update doctor profile details."""
         doctor = self.doctor_repo.get_by_id(doctor_id)

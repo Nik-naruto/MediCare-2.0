@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /doctors
+Allow: /services
+Allow: /about
+Allow: /contact
+
+# Disallow authentication and private portal areas
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /patient/
+Disallow: /doctor/
+Disallow: /receptionist/
+Disallow: /admin/
+
+Sitemap: https://medi-care-2-0-mocha.vercel.app/sitemap.xml

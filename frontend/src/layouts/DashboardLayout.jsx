@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from '../components/layout/Sidebar';
 import { Topbar } from '../components/layout/Topbar';
+import { MobileBottomNav } from '../components/layout/MobileBottomNav';
 
 export const DashboardLayout = ({ title }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -15,9 +16,10 @@ export const DashboardLayout = ({ title }) => {
           isMobileOpen={isMobileOpen}
           onMenuClick={() => setIsMobileOpen((prev) => !prev)}
         />
-        <main className="flex-1 p-3.5 sm:p-6 overflow-y-auto">
+        <main className="flex-1 p-3.5 sm:p-6 pb-20 md:pb-6 overflow-y-auto">
           <Outlet />
         </main>
+        <MobileBottomNav onMenuClick={() => setIsMobileOpen(true)} />
       </div>
     </div>
   );

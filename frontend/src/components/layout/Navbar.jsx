@@ -58,21 +58,21 @@ export const Navbar = () => {
   return (
     <header className="sticky top-0 z-40 bg-[#FBF9F4]/90 dark:bg-[#0C0E12]/90 backdrop-blur-md border-b border-[#E8E3D8] dark:border-slate-800/80 transition-colors">
       {/* Main Navbar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 lg:h-20 flex items-center justify-between">
         {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-3 group">
+        <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group">
           {/* Custom Sine Wave / Pulse Icon */}
-          <div className="w-9 h-9 flex items-center justify-center text-slate-900 dark:text-slate-100">
-            <svg className="w-8 h-8 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-slate-900 dark:text-slate-100">
+            <svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2 12h4l2.5-6 3.5 12 3-8 2 4h5" />
             </svg>
           </div>
           <div>
             <div className="flex items-baseline gap-1">
-              <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">MediCare</span>
-              <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">2.0</span>
+              <span className="text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">MediCare</span>
+              <span className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-400">2.0</span>
             </div>
-            <span className="block font-mono text-[9px] uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 -mt-0.5 font-medium">
+            <span className="hidden sm:block font-mono text-[9px] uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 -mt-0.5 font-medium">
               Healthcare, Simplified
             </span>
           </div>

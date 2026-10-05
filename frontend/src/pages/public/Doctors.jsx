@@ -240,7 +240,7 @@ export const Doctors = () => {
           />
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs font-mono text-slate-500 dark:text-slate-400">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs font-mono text-slate-500 dark:text-slate-400">
           <span>
             Found <strong className="text-slate-900 dark:text-slate-100 font-sans">{totalCount}</strong> medical specialists
           </span>
@@ -333,7 +333,7 @@ export const Doctors = () => {
       {/* Pagination Footer */}
       {!isLoading && doctors.length > 0 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-200/80 dark:border-slate-800 text-xs font-mono text-slate-600 dark:text-slate-400">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
             <span>Show per page:</span>
             <select
               value={pageSize}
@@ -352,7 +352,7 @@ export const Doctors = () => {
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2">
             <Button
               size="sm"
               variant="outline"

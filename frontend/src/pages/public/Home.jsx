@@ -134,22 +134,22 @@ export const Home = () => {
             </div>
 
             {/* Stats Row */}
-            <div className="pt-5 sm:pt-6 border-t border-[#EAE5DC] dark:border-slate-800/80 grid grid-cols-3 gap-4 sm:gap-6 max-w-lg">
+            <div className="pt-5 sm:pt-6 border-t border-[#EAE5DC] dark:border-slate-800/80 grid grid-cols-3 gap-2.5 sm:gap-6 max-w-lg">
               <div className="space-y-0.5">
-                <span className="font-mono text-2xl sm:text-3xl font-light text-slate-900 dark:text-slate-100 block">50+</span>
-                <span className="font-mono text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1.5 uppercase tracking-wider">
+                <span className="font-mono text-xl sm:text-3xl font-light text-slate-900 dark:text-slate-100 block">50+</span>
+                <span className="font-mono text-[9px] sm:text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1 uppercase tracking-wider">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block shrink-0"></span> Specialists
                 </span>
               </div>
-              <div className="space-y-0.5 border-l border-[#EAE5DC] dark:border-slate-800/80 pl-4 sm:pl-6">
-                <span className="font-mono text-2xl sm:text-3xl font-light text-slate-900 dark:text-slate-100 block">99.8%</span>
-                <span className="font-mono text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1.5 uppercase tracking-wider">
+              <div className="space-y-0.5 border-l border-[#EAE5DC] dark:border-slate-800/80 pl-2.5 sm:pl-6">
+                <span className="font-mono text-xl sm:text-3xl font-light text-slate-900 dark:text-slate-100 block">99.8%</span>
+                <span className="font-mono text-[9px] sm:text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1 uppercase tracking-wider">
                   <span className="w-1.5 h-1.5 rounded-full bg-sky-500 inline-block shrink-0"></span> Satisfaction
                 </span>
               </div>
-              <div className="space-y-0.5 border-l border-[#EAE5DC] dark:border-slate-800/80 pl-4 sm:pl-6">
-                <span className="font-mono text-2xl sm:text-3xl font-light text-slate-900 dark:text-slate-100 block">24/7</span>
-                <span className="font-mono text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1.5 uppercase tracking-wider">
+              <div className="space-y-0.5 border-l border-[#EAE5DC] dark:border-slate-800/80 pl-2.5 sm:pl-6">
+                <span className="font-mono text-xl sm:text-3xl font-light text-slate-900 dark:text-slate-100 block">24/7</span>
+                <span className="font-mono text-[9px] sm:text-[11px] text-slate-400 dark:text-slate-500 flex items-center gap-1 uppercase tracking-wider">
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-500 inline-block shrink-0"></span> Support
                 </span>
               </div>

@@ -19,6 +19,8 @@ import {
   Sparkles,
   HeartPulse,
   Info,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 import { apiClient } from '../../api/client';
 import { Input } from '../../components/common/Input';
@@ -36,6 +38,8 @@ export const Register = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [departments, setDepartments] = useState([]);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -251,7 +255,7 @@ export const Register = () => {
     <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex items-center justify-center">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch w-full">
         {/* LEFT COLUMN — PROMOTIONAL PANEL */}
-        <div className="lg:col-span-5 rounded-3xl bg-gradient-to-br from-slate-900 via-sky-950 to-slate-900 text-white p-8 lg:p-10 flex flex-col justify-between shadow-xl relative overflow-hidden border border-slate-800">
+        <div className="lg:col-span-5 rounded-3xl bg-gradient-to-br from-slate-900 via-sky-950 to-slate-900 text-white p-6 sm:p-8 lg:p-10 flex flex-col justify-between shadow-xl relative overflow-hidden border border-slate-800">
           {/* Subtle Ambient Background Accents */}
           <div className="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 rounded-full bg-sky-500/10 blur-3xl pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 -mb-12 -ml-12 w-64 h-64 rounded-full bg-teal-500/10 blur-3xl pointer-events-none"></div>
@@ -339,10 +343,10 @@ export const Register = () => {
         </div>
 
         {/* RIGHT COLUMN — REGISTRATION CARD FORM */}
-        <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-xl border border-slate-200/80 text-left flex flex-col justify-between">
+        <div className="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-8 lg:p-10 shadow-xl border border-slate-200/80 text-left flex flex-col justify-between">
           <div>
             {/* Top Sign-in Redirect Link */}
-            <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                   Create Your Account
@@ -352,7 +356,7 @@ export const Register = () => {
                 </p>
               </div>
 
-              <div className="text-right shrink-0">
+              <div className="sm:text-right shrink-0">
                 <span className="block text-[11px] text-slate-500 font-medium">Already have an account?</span>
                 <Link
                   to="/login"
@@ -377,7 +381,7 @@ export const Register = () => {
                 Select Registration Role *
               </label>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                 {rolesConfig.map((roleCard) => {
                   const Icon = roleCard.icon;
                   const isSelected = selectedRole === roleCard.id;
@@ -781,21 +785,43 @@ export const Register = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input
                     label="Account Password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     required
                     icon={Lock}
                     placeholder="Min 6 characters"
                     value={formData.password}
                     onChange={(e) => handleChange('password', e.target.value)}
+                    endAction={
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="p-1.5 -mr-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus:outline-none transition-colors cursor-pointer rounded-lg"
+                        title={showPassword ? 'Hide password' : 'Show password'}
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    }
                   />
                   <Input
                     label="Confirm Password"
-                    type="password"
+                    type={showConfirmPassword ? 'text' : 'password'}
                     required
                     icon={Lock}
                     placeholder="Re-enter password"
                     value={formData.confirmPassword}
                     onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                    endAction={
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword((prev) => !prev)}
+                        className="p-1.5 -mr-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus:outline-none transition-colors cursor-pointer rounded-lg"
+                        title={showConfirmPassword ? 'Hide password' : 'Show password'}
+                        aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    }
                   />
                 </div>
               </div>

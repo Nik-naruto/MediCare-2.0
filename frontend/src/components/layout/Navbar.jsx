@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Activity, Search, ArrowRight } from 'lucide-react';
+import { Activity, Search, ArrowRight, Menu, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../common/Button';
 import { ThemeToggle } from '../common/ThemeToggle';
@@ -11,6 +11,12 @@ export const Navbar = () => {
   const { role, currentUser, isAuthenticated } = useAuth();
   const activeRole = role || 'Patient';
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Auto-close mobile menu when changing location
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const navLinks = [
     { label: 'Home', path: '/', sectionId: 'home' },
@@ -100,7 +106,7 @@ export const Navbar = () => {
         </nav>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {/* Search Icon Button */}
           <button
             type="button"
@@ -132,7 +138,7 @@ export const Navbar = () => {
               </Link>
             </>
           ) : (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Link
                 to={profilePath}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 border border-slate-200/70 dark:border-slate-700 transition-all group"
@@ -149,7 +155,7 @@ export const Navbar = () => {
                     {initials}
                   </div>
                 )}
-                <span className="text-xs font-medium text-slate-800 dark:text-slate-200 truncate max-w-[100px] sm:max-w-[140px]">
+                <span className="text-xs font-medium text-slate-800 dark:text-slate-200 truncate max-w-[80px] xs:max-w-[100px] sm:max-w-[140px]">
                   {userDisplayName}
                 </span>
               </Link>
@@ -161,8 +167,108 @@ export const Navbar = () => {
               </Link>
             </div>
           )}
+
+          {/* Mobile Navigation Toggle (Hamburger) */}
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            title={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+            className="lg:hidden w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/70 dark:hover:bg-slate-700/70 flex items-center justify-center text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Navigation Dropdown Drawer */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden border-t border-[#E8E3D8] dark:border-slate-800/80 bg-[#FBF9F4] dark:bg-[#0C0E12] px-4 py-5 space-y-4 animate-fade-in shadow-lg">
+          {/* Navigation Links */}
+          <nav className="flex flex-col space-y-1">
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={(e) => {
+                    handleNavClick(e, link);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`px-3.5 py-2.5 rounded-xl text-xs font-medium transition-colors flex items-center justify-between ${
+                    isActive
+                      ? 'bg-slate-200/70 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold'
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100'
+                  }`}
+                >
+                  <span>{link.label}</span>
+                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-slate-900 dark:bg-slate-100" />}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Mobile Actions / Buttons */}
+          <div className="pt-3 border-t border-[#E8E3D8] dark:border-slate-800/80 flex flex-col gap-2.5">
+            {!isAuthenticated ? (
+              <>
+                <Link
+                  to="/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full"
+                >
+                  <Button variant="outline" size="sm" className="w-full py-2.5 text-xs justify-center">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link
+                  to="/patient/book-appointment"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full"
+                >
+                  <Button variant="primary" size="sm" icon={ArrowRight} iconPosition="right" className="w-full py-2.5 text-xs justify-center shadow-xs">
+                    Book Appointment
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to={profilePath}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-medium"
+                >
+                  {currentUser?.avatar ? (
+                    <img
+                      src={currentUser.avatar}
+                      alt={userDisplayName}
+                      className="w-7 h-7 rounded-full object-cover border border-slate-300 dark:border-slate-600 shrink-0"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-mono font-bold text-[10px] flex items-center justify-center shrink-0">
+                      {initials}
+                    </div>
+                  )}
+                  <div className="flex-1 truncate">
+                    <span className="block font-bold truncate">{userDisplayName}</span>
+                    <span className="text-[10px] text-slate-500 capitalize">{activeRole} Profile</span>
+                  </div>
+                </Link>
+                <Link
+                  to={`/${activeRole.toLowerCase()}/dashboard`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full"
+                >
+                  <Button variant="primary" size="sm" className="w-full py-2.5 text-xs justify-center shadow-xs">
+                    Open {activeRole} Portal
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 };

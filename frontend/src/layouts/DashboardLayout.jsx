@@ -15,7 +15,7 @@ export const DashboardLayout = ({ title }) => {
           isMobileOpen={isMobileOpen}
           onMenuClick={() => setIsMobileOpen((prev) => !prev)}
         />
-        <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+        <main className="flex-1 p-3.5 sm:p-6 overflow-y-auto">
           <Outlet />
         </main>
       </div>

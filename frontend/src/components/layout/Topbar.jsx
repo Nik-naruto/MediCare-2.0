@@ -145,28 +145,28 @@ export const Topbar = ({ title, isMobileOpen = false, onMenuClick = () => {} }) 
   const userInitials = getInitials(currentUser?.name || currentUser?.full_name || currentUser?.email);
 
   return (
-    <header className="sticky top-0 z-30 bg-[#F9F9F8]/90 dark:bg-[#0C0E12]/90 backdrop-blur-md border-b border-slate-200/60 dark:border-slate-800/80 px-4 sm:px-6 py-3 flex items-center justify-between transition-colors">
-      <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-30 bg-[#F9F9F8]/90 dark:bg-[#0C0E12]/90 backdrop-blur-md border-b border-slate-200/60 dark:border-slate-800/80 px-3.5 sm:px-6 py-3 flex items-center justify-between transition-colors">
+      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
         {/* Mobile Hamburger Toggle Button */}
         <button
           onClick={onMenuClick}
-          className="md:hidden p-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors focus:outline-none"
+          className="md:hidden p-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors focus:outline-none shrink-0"
           aria-label={isMobileOpen ? 'Close navigation' : 'Open navigation'}
         >
           {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
 
         {/* Page Title & Breadcrumb */}
-        <div>
-          <h1 className="text-base sm:text-lg font-light text-slate-900 dark:text-slate-100 tracking-tight">{title}</h1>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-slate-400 dark:text-slate-500 block -mt-0.5">
+        <div className="min-w-0">
+          <h1 className="text-sm sm:text-base md:text-lg font-light text-slate-900 dark:text-slate-100 tracking-tight truncate max-w-[130px] xs:max-w-[200px] sm:max-w-none">{title}</h1>
+          <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-widest text-slate-400 dark:text-slate-500 block -mt-0.5 truncate max-w-[130px] xs:max-w-[200px] sm:max-w-none">
             MediCare 2.0 &bull; {activeRole} Workspace
           </span>
         </div>
       </div>
 
       {/* Right Controls */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         <ThemeToggle size="md" />
 
         {/* Notifications Control */}
